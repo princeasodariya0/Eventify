@@ -36,7 +36,7 @@ const AdminDashboard = () => {
       const eventsRes = await api.get("/api/events");
       const bookingsRes = await api.get("/api/bookings/my");
 
-      setEvents(eventsRes.data.events || []);
+      setEvents(eventsRes.data.events || eventsRes.data || []);
       setBookings(bookingsRes.data.bookings || []);
     } catch (error) {
       toast.error(error.response?.data?.message || "Error loading dashboard data");
