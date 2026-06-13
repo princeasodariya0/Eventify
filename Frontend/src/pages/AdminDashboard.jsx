@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import api from "../utils/axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
 
 const AdminDashboard = () => {
   const { user } = useContext(AuthContext);
@@ -38,14 +39,15 @@ const AdminDashboard = () => {
       setEvents(eventsRes.data.events || []);
       setBookings(bookingsRes.data.bookings || []);
     } catch (error) {
-      console.error("Error fetching admin data", error);
+      toast.error(error.response?.data?.message || "Error loading dashboard data");
     }
   };
 
   const handleCreateEvent = async (e) => {
     e.preventDefault();
     try {
-      await api.post("/api/events", formData);
+      const res = await api.post("/api/events", formData);
+      toast.success(res.data?.message || "Event created successfully!");
       setShowEventForm(false);
       setFormData({
         title: "",
@@ -59,27 +61,29 @@ const AdminDashboard = () => {
       });
       fetchData();
     } catch (error) {
-      alert(error.response?.data?.message || "Error creating event");
+      toast.error(error.response?.data?.message || "Error creating event");
     }
   };
 
   const handleDeleteEvent = async (id) => {
     if (window.confirm("Are you sure you want to delete this event?")) {
       try {
-        await api.delete(`/api/events/${id}`);
+        const res = await api.delete(`/api/events/${id}`);
+        toast.success(res.data?.message || "Event deleted successfully!");
         fetchData();
       } catch (error) {
-        alert("Error deleting event");
+        toast.error(error.response?.data?.message || "Error deleting event");
       }
     }
   };
 
   const handleConfirmBooking = async (id, paymentStatus) => {
     try {
-      await api.put(`/api/bookings/${id}/confirm`, { paymentStatus });
+      const res = await api.put(`/api/bookings/${id}/confirm`, { paymentStatus });
+      toast.success(res.data?.message || "Booking confirmed successfully!");
       fetchData();
     } catch (error) {
-      alert(error.response?.data?.message || "Error confirming booking");
+      toast.error(error.response?.data?.message || "Error confirming booking");
     }
   };
 
@@ -88,10 +92,10 @@ const AdminDashboard = () => {
 
     try {
       const res = await api.delete(`/api/bookings/${id}`);
-      alert(res.data.message);
+      toast.success(res.data.message);
       await fetchData();
     } catch (error) {
-      alert(
+      toast.error(
         error.response?.data?.message ||
           error.message ||
           "Error cancelling booking"

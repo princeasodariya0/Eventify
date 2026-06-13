@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate, NavLink } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -20,10 +21,12 @@ const Login = () => {
         try {
             if (!showOTP) {
                 const data = await login(email, password);
+                toast.success('Login successful!');
                 if (data.role === 'admin') navigate('/admin');
                 else navigate('/dashboard');
             } else {
                 const data = await verifyOTP(email, otp);
+                toast.success('Account verified successfully!');
                 if (data.role === 'admin') navigate('/admin');
                 else navigate('/dashboard');
             }
@@ -32,7 +35,8 @@ const Login = () => {
                 setShowOTP(true);
                 setError('Account not verified. A new OTP has been sent to your email.');
             } else {
-                setError(err.message || err);
+                setError(typeof err === 'string' ? err : err.message || 'Login failed');
+                toast.error(typeof err === 'string' ? err : err.message || 'Login failed');
             }
         } finally {
             setLoading(false);

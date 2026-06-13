@@ -24,7 +24,7 @@ const UserDashboard = () => {
             const res = await api.get('/api/bookings/my');
             setBookings(res.data.bookings);
         } catch (error) {
-            toast.error('Error fetching bookings' || error.message);
+            toast.error(error.response?.data?.message || 'Error fetching bookings');
         } finally {
             setLoading(false);
         }
@@ -34,9 +34,10 @@ const UserDashboard = () => {
         if (window.confirm('Are you sure you want to cancel this booking request?')) {
             try {
                 await api.delete(`/api/bookings/${id}`);
+                toast.success('Booking cancelled successfully!');
                 fetchBookings();
             } catch (error) {
-                alert(error.response?.data?.message || 'Error cancelling booking');
+                toast.error(error.response?.data?.message || 'Error cancelling booking');
             }
         }
     };

@@ -21,18 +21,13 @@ app.use(
       "http://localhost:5174",
       "http://localhost:3000",
       process.env.RENDER_DOMAIN,
-      // process.env.VERCEL_DOMAIN,
+      process.env.VERCEL_DOMAIN,
     ],
     credentials: true,
     allowedHeaders: ["Content-Type", "Authorization"],
   }),
 );
 app.use(express.json());
-// app.use((req, res, next) => {
-//   console.log("GLOBAL:", req.method, req.originalUrl);
-//   console.log("HEADERS AUTH:", req.headers.authorization);
-//   next();
-// });
 
 // Routes
 app.use("/api/auth", authRoutes);

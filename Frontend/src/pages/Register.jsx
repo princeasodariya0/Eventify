@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
 import { useNavigate, NavLink } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const Register = () => {
     const [name, setName] = useState('');
@@ -20,15 +21,19 @@ const Register = () => {
         setError('');
         try {
             if (!showOTP) {
-                await register(name, email, password);
+                const data = await register(name, email, password);
+                toast.success(data?.message || 'OTP sent to your email!');
                 setShowOTP(true);
                 setError('');
             } else {
                 await verifyOTP(email, otp);
+                toast.success('Account created and verified successfully!');
                 navigate('/dashboard');
             }
         } catch (err) {
-            setError(err);
+            const errorMsg = typeof err === 'string' ? err : err.message || 'Registration failed';
+            setError(errorMsg);
+            toast.error(errorMsg);
         } finally {
             setLoading(false);
         }
