@@ -21,9 +21,9 @@ const EventDetail = () => {
   const [showOTP, setShowOTP] = useState(false);
 
   useEffect(() => {
-    (async () => {
+    ;(async () => {
       try {
-        const res = await api.get(`/events/${id}`);
+        const res = await api.get(`/api/events/${id}`);
         setEvent(res.data.event);
       } catch (err) {
         toast.error(err.response?.data?.message || "Event does not exist");
@@ -43,11 +43,11 @@ const EventDetail = () => {
 
     try {
       if (!showOTP) {
-        const res = await api.post("/bookings/send-otp");
+        const res = await api.post("/api/bookings/send-otp");
         setShowOTP(true);
         toast.success(res.data?.message || "OTP sent to your email.");
       } else {
-        const res = await api.post("/bookings", {
+        const res = await api.post("/api/bookings", {
           eventId: event._id,
           otp,
         });

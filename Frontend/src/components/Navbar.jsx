@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { FaTicketAlt, FaBars, FaTimes } from 'react-icons/fa';
 
@@ -18,22 +18,22 @@ const Navbar = () => {
         <nav className="bg-gray-900 shadow-lg sticky top-0 z-50">
             <div className="container mx-auto px-4">
                 <div className="flex justify-between items-center py-4">
-                    <Link to="/" className="text-white text-2xl font-bold flex items-center gap-2" onClick={() => setIsMenuOpen(false)}>
+                    <NavLink to="/" className="text-white text-2xl font-bold flex items-center gap-2" onClick={() => setIsMenuOpen(false)}>
                         <FaTicketAlt /> Eventify
-                    </Link>
+                    </NavLink>
                     
                     {/* Desktop Menu */}
                     <div className="hidden md:flex items-center gap-6">
-                        <Link to="/" className="text-gray-200 hover:text-white transition cursor-pointer">Events</Link>
+                        <NavLink to="/" className="text-gray-200 hover:text-white transition cursor-pointer">Events</NavLink>
                         {user ? (
                             <>
-                                <Link to={user.role === 'admin' ? '/admin' : '/dashboard'} className="text-gray-200 hover:text-white transition">Dashboard</Link>
+                                <NavLink to={user.role === 'admin' ? '/admin' : '/dashboard'} className="text-gray-200 hover:text-white transition">Dashboard</NavLink>
                                 <button onClick={handleLogout} className="bg-gray-700 hover:bg-black text-white px-4 py-2 rounded-lg transition">Logout</button>
                             </>
                         ) : (
                             <>
-                                <Link to="/login" className="text-gray-200 hover:text-white transition">Login</Link>
-                                <Link to="/register" className="bg-white text-gray-900 hover:bg-gray-100 px-4 py-2 rounded-lg font-semibold transition">Sign Up</Link>
+                                <NavLink to="/login" className="text-gray-200 hover:text-white transition">Login</NavLink>
+                                <NavLink to="/register" className="bg-white text-gray-900 hover:bg-gray-100 px-4 py-2 rounded-lg font-semibold transition">Sign Up</NavLink>
                             </>
                         )}
                     </div>
@@ -50,16 +50,16 @@ const Navbar = () => {
                 {/* Mobile Menu */}
                 {isMenuOpen && (
                     <div className="md:hidden pb-6 space-y-4">
-                        <Link to="/" className="block text-gray-200 hover:text-white transition py-2 text-center" onClick={() => setIsMenuOpen(false)}>Events</Link>
+                        <NavLink to="/" className="block text-gray-200 hover:text-white transition py-2 text-center" onClick={() => setIsMenuOpen(false)}>Events</NavLink>
                         {user ? (
                             <>
-                                <Link to={user.role === 'admin' ? '/admin' : '/dashboard'} className="block text-gray-200 hover:text-white transition py-2 text-center" onClick={() => setIsMenuOpen(false)}>Dashboard</Link>
+                                <NavLink to={user.role === 'admin' ? '/admin' : '/dashboard'} className="block text-gray-200 hover:text-white transition py-2 text-center" onClick={() => setIsMenuOpen(false)}>Dashboard</NavLink>
                                 <button onClick={handleLogout} className="w-full bg-gray-700 hover:bg-black text-white px-4 py-2 rounded-lg transition">Logout</button>
                             </>
                         ) : (
                             <>
-                                <Link to="/login" className="block text-gray-200 hover:text-white transition py-2 text-center" onClick={() => setIsMenuOpen(false)}>Login</Link>
-                                <Link to="/register" className="block bg-white text-gray-900 hover:bg-gray-100 px-4 py-2 rounded-lg font-semibold transition text-center" onClick={() => setIsMenuOpen(false)}>Sign Up</Link>
+                                <NavLink to="/login" className="block text-gray-200 hover:text-white transition py-2 text-center" onClick={() => setIsMenuOpen(false)}>Login</NavLink>
+                                <NavLink to="/register" className="block bg-white text-gray-900 hover:bg-gray-100 px-4 py-2 rounded-lg font-semibold transition text-center" onClick={() => setIsMenuOpen(false)}>Sign Up</NavLink>
                             </>
                         )}
                     </div>

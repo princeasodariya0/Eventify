@@ -21,7 +21,7 @@ const UserDashboard = () => {
 
     const fetchBookings = async () => {
         try {
-            const res = await api.get('/bookings/my');
+            const res = await api.get('/api/bookings/my');
             setBookings(res.data.bookings);
         } catch (error) {
             toast.error('Error fetching bookings' || error.message);
@@ -33,7 +33,7 @@ const UserDashboard = () => {
     const cancelBooking = async (id) => {
         if (window.confirm('Are you sure you want to cancel this booking request?')) {
             try {
-                await api.delete(`/bookings/${id}`);
+                await api.delete(`/api/bookings/${id}`);
                 fetchBookings();
             } catch (error) {
                 alert(error.response?.data?.message || 'Error cancelling booking');

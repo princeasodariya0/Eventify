@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import api from '../utils/axios';
 import { FaCalendarAlt, FaMapMarkerAlt, FaSearch, FaRegClock, FaTicketAlt, FaShieldAlt } from 'react-icons/fa';
 
@@ -11,13 +11,13 @@ const Home = () => {
     useEffect(() => {
         const timeoutId = setTimeout(() => {
             fetchEvents();
-        }, 400); // 400ms debounce
+        }, 400); 
         return () => clearTimeout(timeoutId);
     }, [search]);
 
     const fetchEvents = async () => {
         try {
-            const res = await api.get(`/events?search=${search}`);
+            const res = await api.get(`/api/events?search=${search}`);
             setEvents(res.data);
         } catch (error) {
             console.error('Error fetching events:', error);
@@ -120,9 +120,9 @@ const Home = () => {
                                         <div className="bg-gray-700 h-1.5 sm:h-2 rounded-full" style={{ width: `${(event.availableSeats / event.totalSeats) * 100}%` }}></div>
                                     </div>
                                     <p className="text-xs text-gray-500 mb-3 sm:mb-4">{event.availableSeats} of {event.totalSeats} seats remaining</p>
-                                    <Link to={`/events/${event._id}`} className="block w-full text-center bg-gray-100 hover:bg-gray-200 text-gray-900 font-semibold py-2.5 sm:py-2 rounded-lg transition text-sm">
+                                    <NavLink to={`/events/${event._id}`} className="block w-full text-center bg-gray-100 hover:bg-gray-200 text-gray-900 font-semibold py-2.5 sm:py-2 rounded-lg transition text-sm">
                                         View Details
-                                    </Link>
+                                    </NavLink>
                                 </div>
                             </div>
                         </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { FaCheckCircle } from 'react-icons/fa';
 
 const PaymentSuccess = () => {
@@ -10,12 +10,12 @@ const PaymentSuccess = () => {
                 <h1 className="text-2xl sm:text-4xl font-black text-gray-900 mb-3 sm:mb-4">Booking Confirmed!</h1>
                 <p className="text-gray-500 mb-6 sm:mb-8 text-sm sm:text-lg">Your ticket has been booked successfully. A confirmation email has been sent to your registered email address.</p>
                 <div className="space-y-3 sm:space-y-4">
-                    <Link to="/dashboard" className="block w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-xl transition shadow-lg hover:shadow-xl text-sm sm:text-base">
+                    <NavLink to="/dashboard" className="block w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-xl transition shadow-lg hover:shadow-xl text-sm sm:text-base">
                         View My Tickets
-                    </Link>
-                    <Link to="/" className="block w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-xl transition text-sm sm:text-base">
+                    </NavLink>
+                    <NavLink to="/" className="block w-full bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-3 sm:py-4 px-4 sm:px-6 rounded-xl transition text-sm sm:text-base">
                         Discover More Events
-                    </Link>
+                    </NavLink>
                 </div>
             </div>
         </div>

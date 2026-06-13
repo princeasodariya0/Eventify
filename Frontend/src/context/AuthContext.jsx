@@ -17,7 +17,7 @@ export const AuthProvider = ({ children }) => {
 
     const login = async (email, password) => {
         try {
-            const { data } = await api.post('/auth/login', { email, password });
+            const { data } = await api.post('/api/auth/login', { email, password });
             setUser(data);
             localStorage.setItem('userInfo', JSON.stringify(data));
             localStorage.setItem('token', data.token);
@@ -30,8 +30,8 @@ export const AuthProvider = ({ children }) => {
 
     const register = async (name, email, password) => {
         try {
-            const { data } = await api.post('/auth/register', { name, email, password });
-            return data; // Returns { message, email }
+            const { data } = await api.post('/api/auth/register', { name, email, password });
+            return data; 
         } catch (error) {
             throw error.response?.data?.message || 'Registration failed';
         }
@@ -39,7 +39,7 @@ export const AuthProvider = ({ children }) => {
 
     const verifyOTP = async (email, otp) => {
         try {
-            const { data } = await api.post('/auth/verify-otp', { email, otp });
+            const { data } = await api.post('/api/auth/verify-otp', { email, otp });
             setUser(data);
             localStorage.setItem('userInfo', JSON.stringify(data));
             localStorage.setItem('token', data.token);

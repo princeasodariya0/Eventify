@@ -32,8 +32,8 @@ const AdminDashboard = () => {
 
   const fetchData = async () => {
     try {
-      const eventsRes = await api.get("/events");
-      const bookingsRes = await api.get("/bookings/my");
+      const eventsRes = await api.get("/api/events");
+      const bookingsRes = await api.get("/api/bookings/my");
 
       setEvents(eventsRes.data.events || []);
       setBookings(bookingsRes.data.bookings || []);
@@ -45,7 +45,7 @@ const AdminDashboard = () => {
   const handleCreateEvent = async (e) => {
     e.preventDefault();
     try {
-      await api.post("/events", formData);
+      await api.post("/api/events", formData);
       setShowEventForm(false);
       setFormData({
         title: "",
@@ -66,7 +66,7 @@ const AdminDashboard = () => {
   const handleDeleteEvent = async (id) => {
     if (window.confirm("Are you sure you want to delete this event?")) {
       try {
-        await api.delete(`/events/${id}`);
+        await api.delete(`/api/events/${id}`);
         fetchData();
       } catch (error) {
         alert("Error deleting event");
@@ -76,7 +76,7 @@ const AdminDashboard = () => {
 
   const handleConfirmBooking = async (id, paymentStatus) => {
     try {
-      await api.put(`/bookings/${id}/confirm`, { paymentStatus });
+      await api.put(`/api/bookings/${id}/confirm`, { paymentStatus });
       fetchData();
     } catch (error) {
       alert(error.response?.data?.message || "Error confirming booking");
@@ -87,7 +87,7 @@ const AdminDashboard = () => {
     if (!window.confirm("Cancel this user's booking request?")) return;
 
     try {
-      const res = await api.delete(`/bookings/${id}`);
+      const res = await api.delete(`/api/bookings/${id}`);
       alert(res.data.message);
       await fetchData();
     } catch (error) {

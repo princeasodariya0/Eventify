@@ -1,6 +1,6 @@
 import React, { useState, useContext } from 'react';
 import { AuthContext } from '../context/AuthContext';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, NavLink } from 'react-router-dom';
 
 const Register = () => {
     const [name, setName] = useState('');
@@ -106,7 +106,7 @@ const Register = () => {
 
             {!showOTP && (
                 <p className="text-center mt-4 sm:mt-6 text-gray-600 text-sm">
-                    Already have an account? <Link to="/login" className="text-gray-900 font-bold hover:underline">Sign in</Link>
+                    Already have an account? <NavLink to="/login" className="text-gray-900 font-bold hover:underline">Sign in</NavLink>
                 </p>
             )}
         </div>
