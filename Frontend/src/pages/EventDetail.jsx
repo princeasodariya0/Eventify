@@ -58,9 +58,11 @@ const EventDetail = () => {
           ...prev,
           availableSeats: prev.availableSeats - 1,
         }));
+        navigate("/payment-success");
       }
     } catch (err) {
       toast.error(err.response?.data?.message || "Booking failed");
+      navigate("/payment-failed");
     } finally {
       setBookingLoading(false);
     }
