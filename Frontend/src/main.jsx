@@ -1,13 +1,26 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import { AuthProvider } from "./context/AuthContext";
-import "./index.css";
+import { BrowserRouter } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import axios from "axios";
+
 import App from "./App.jsx";
+
+import "react-toastify/dist/ReactToastify.css";
+import "@fortawesome/fontawesome-free/css/all.min.css";
+import "./index.css";
+
+axios.defaults.withCredentials = true;
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
-    <AuthProvider>
+    <BrowserRouter>
       <App />
-    </AuthProvider>
-  </StrictMode>,
+      <ToastContainer
+        position="top-left"
+        autoClose={3000}
+        hideProgressBar={false}
+      />
+    </BrowserRouter>
+  </StrictMode>
 );
