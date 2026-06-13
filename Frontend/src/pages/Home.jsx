@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import api from '../utils/axios';
 import { FaCalendarAlt, FaMapMarkerAlt, FaSearch, FaRegClock, FaTicketAlt, FaShieldAlt } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 
 const Home = () => {
     const [events, setEvents] = useState([]);
@@ -20,7 +21,7 @@ const Home = () => {
             const res = await api.get(`/api/events?search=${search}`);
             setEvents(res.data);
         } catch (error) {
-            console.error('Error fetching events:', error);
+            toast.error('Error loading events');
         } finally {
             setLoading(false);
         }
@@ -28,24 +29,24 @@ const Home = () => {
 
     return (
         <div className="flex flex-col min-h-screen">
-            <div className="relative bg-black text-white rounded-3xl overflow-hidden mb-8 sm:mb-12 shadow-2xl mx-2 sm:mx-4">
-                <div className="absolute inset-0 opacity-40 bg-[url('https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=3000&auto=format&fit=crop')] bg-cover bg-center"></div>
-                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent"></div>
+            <div className="relative bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-500 text-white rounded-3xl overflow-hidden mb-8 sm:mb-12 shadow-2xl mx-2 sm:mx-4">
+                <div className="absolute inset-0 opacity-20 bg-[url('https://images.unsplash.com/photo-1459749411175-04bf5292ceea?q=80&w=3000&auto=format&fit=crop')] bg-cover bg-center"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-indigo-900 via-purple-900/80 to-transparent"></div>
                 <div className="relative p-6 sm:p-10 md:p-20 text-center flex flex-col items-center z-10">
                     <span className="bg-white/20 text-white backdrop-blur-md px-3 py-1.5 rounded-full text-xs font-bold tracking-widest uppercase mb-4 sm:mb-6 border border-white/20">Welcome to Eventify</span>
                     <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-black mb-4 sm:mb-6 leading-tight tracking-tight drop-shadow-lg">
-                        Find Your Next <br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-gray-500">Unforgettable</span> Experience
+                        Find Your Next <br /><span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-pink-200">Unforgettable</span> Experience
                     </h1>
-                    <p className="text-gray-300 text-sm sm:text-lg md:text-xl mb-6 sm:mb-10 max-w-2xl mx-auto font-light leading-relaxed px-4">
+                    <p className="text-gray-200 text-sm sm:text-lg md:text-xl mb-6 sm:mb-10 max-w-2xl mx-auto font-light leading-relaxed px-4">
                         Discover the best tech conferences, late-night music festivals, and hands-on workshops happening directly in your area. Secure your spot today.
                     </p>
 
                     <div className="w-full max-w-2xl mx-auto relative flex items-center shadow-2xl group px-2">
-                        <FaSearch className="absolute left-5 text-gray-500 text-lg sm:text-xl group-focus-within:text-black transition-colors" />
+                        <FaSearch className="absolute left-5 text-gray-400 text-lg sm:text-xl group-focus-within:text-purple-700 transition-colors" />
                         <input
                             type="text"
                             placeholder="Search events by title..."
-                            className="w-full pl-12 sm:pl-16 pr-4 sm:pr-6 py-3 sm:py-5 rounded-full text-base sm:text-lg text-black bg-white/95 backdrop-blur-sm border-2 border-transparent focus:border-gray-500 focus:outline-none transition-all placeholder-gray-400 font-medium"
+                            className="w-full pl-12 sm:pl-16 pr-4 sm:pr-6 py-3 sm:py-5 rounded-full text-base sm:text-lg text-gray-900 bg-white/95 backdrop-blur-sm border-2 border-transparent focus:border-yellow-300 focus:outline-none transition-all placeholder-gray-400 font-medium"
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
                         />
@@ -55,21 +56,21 @@ const Home = () => {
 
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8 mb-8 sm:mb-16 px-2 sm:px-4">
                 <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center text-center hover:-translate-y-1 transition duration-300">
-                    <div className="w-14 h-14 sm:w-16 sm:h-16 bg-gray-900 text-white rounded-2xl flex items-center justify-center text-xl sm:text-2xl mb-4 sm:mb-6 shadow-md shadow-gray-200/50">
+                    <div className="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-2xl flex items-center justify-center text-xl sm:text-2xl mb-4 sm:mb-6 shadow-md shadow-purple-200/50">
                         <FaRegClock />
                     </div>
                     <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3">Fast Booking</h3>
                     <p className="text-gray-500 text-xs sm:text-sm leading-relaxed">Secure your tickets instantly with our fast streamlined booking infrastructure built for speed.</p>
                 </div>
                 <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center text-center hover:-translate-y-1 transition duration-300">
-                    <div className="w-14 h-14 sm:w-16 sm:h-16 bg-gray-900 text-white rounded-2xl flex items-center justify-center text-xl sm:text-2xl mb-4 sm:mb-6 shadow-md shadow-gray-200/50">
+                    <div className="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-r from-purple-600 to-pink-500 text-white rounded-2xl flex items-center justify-center text-xl sm:text-2xl mb-4 sm:mb-6 shadow-md shadow-pink-200/50">
                         <FaTicketAlt />
                     </div>
                     <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3">Seamless Access</h3>
                     <p className="text-gray-500 text-xs sm:text-sm leading-relaxed">Download tickets instantly or manage them right from your personal dashboard with easily.</p>
                 </div>
                 <div className="bg-white p-6 sm:p-8 rounded-2xl shadow-sm border border-gray-100 flex flex-col items-center text-center hover:-translate-y-1 transition duration-300 sm:col-span-2 md:col-span-1">
-                    <div className="w-14 h-14 sm:w-16 sm:h-16 bg-gray-900 text-white rounded-2xl flex items-center justify-center text-xl sm:text-2xl mb-4 sm:mb-6 shadow-md shadow-gray-200/50">
+                    <div className="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-r from-pink-500 to-red-500 text-white rounded-2xl flex items-center justify-center text-xl sm:text-2xl mb-4 sm:mb-6 shadow-md shadow-red-200/50">
                         <FaShieldAlt />
                     </div>
                     <h3 className="text-lg sm:text-xl font-bold text-gray-900 mb-2 sm:mb-3">Secure Platform</h3>
@@ -78,7 +79,10 @@ const Home = () => {
             </div>
 
             <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-6 sm:mb-8 px-2 sm:px-4 border-b border-gray-200 pb-4 gap-3">
-                <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900">Upcoming Events</h2>
+                <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 flex items-center gap-2">
+                    <span className="w-2 h-8 bg-gradient-to-b from-indigo-600 to-purple-600 rounded-full"></span>
+                    Upcoming Events
+                </h2>
                 <div className="text-gray-500 font-medium">{events.length} results found</div>
             </div>
 
@@ -89,12 +93,12 @@ const Home = () => {
             ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 md:gap-8 px-2 sm:px-4">
                     {events.map((event) => (
-                        <div key={event._id} className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl transition flex flex-col">
+                        <div key={event._id} className="bg-white rounded-xl overflow-hidden shadow-md hover:shadow-xl hover:shadow-purple-100 transition flex flex-col border border-gray-100">
                             <div className="h-40 sm:h-48 bg-gray-200 overflow-hidden relative">
                                 {event.image ? (
-                                    <img src={event.image} alt={event.title} className="w-full h-full object-cover" />
+                                    <img src={event.image} alt={event.title} className="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
                                 ) : (
-                                    <div className="w-full h-full flex items-center justify-center bg-gray-200 text-gray-600 font-bold text-xl sm:text-2xl">
+                                    <div className="w-full h-full flex items-center justify-center bg-gradient-to-r from-indigo-500 to-purple-500 text-white font-bold text-xl sm:text-2xl">
                                         {event.category || 'Event'}
                                     </div>
                                 )}
@@ -103,7 +107,7 @@ const Home = () => {
                                 </div>
                             </div>
                             <div className="p-4 sm:p-6 flex-grow flex flex-col">
-                                <div className="text-xs font-bold text-gray-700 uppercase tracking-wider mb-1 sm:mb-2">{event.category}</div>
+                                <div className="text-xs font-bold text-purple-700 uppercase tracking-wider mb-1 sm:mb-2">{event.category}</div>
                                 <h2 className="text-lg sm:text-xl font-bold text-gray-800 mb-2 sm:mb-3">{event.title}</h2>
                                 <div className="flex flex-col gap-1 sm:gap-2 mb-3 sm:mb-4 text-gray-600 text-xs sm:text-sm">
                                     <div className="flex items-center gap-1 sm:gap-2">
@@ -117,10 +121,10 @@ const Home = () => {
                                 </div>
                                 <div className="mt-auto">
                                     <div className="w-full bg-gray-200 rounded-full h-1.5 sm:h-2 mb-1.5 sm:mb-2">
-                                        <div className="bg-gray-700 h-1.5 sm:h-2 rounded-full" style={{ width: `${(event.availableSeats / event.totalSeats) * 100}%` }}></div>
+                                        <div className="bg-gradient-to-r from-indigo-600 to-purple-600 h-1.5 sm:h-2 rounded-full" style={{ width: `${(event.availableSeats / event.totalSeats) * 100}%` }}></div>
                                     </div>
                                     <p className="text-xs text-gray-500 mb-3 sm:mb-4">{event.availableSeats} of {event.totalSeats} seats remaining</p>
-                                    <NavLink to={`/events/${event._id}`} className="block w-full text-center bg-gray-100 hover:bg-gray-200 text-gray-900 font-semibold py-2.5 sm:py-2 rounded-lg transition text-sm">
+                                    <NavLink to={`/events/${event._id}`} className="block w-full text-center bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-purple-700 hover:to-pink-600 text-white font-semibold py-2.5 sm:py-2 rounded-lg transition text-sm shadow-md hover:shadow-purple-200">
                                         View Details
                                     </NavLink>
                                 </div>
@@ -132,8 +136,8 @@ const Home = () => {
 
             <footer className="mt-auto pt-12 sm:pt-16 pb-6 sm:pb-8 border-t border-gray-200 text-center px-4">
                 <div className="flex justify-center items-center gap-2 mb-3 sm:mb-4">
-                    <FaTicketAlt className="text-gray-800 text-xl sm:text-2xl" />
-                    <span className="text-lg sm:text-xl font-bold text-gray-900">Eventify</span>
+                    <FaTicketAlt className="bg-gradient-to-r from-indigo-600 to-purple-600 text-xl sm:text-2xl bg-clip-text text-transparent" />
+                    <span className="text-lg sm:text-xl font-black bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">Eventify</span>
                 </div>
                 <p className="text-gray-500 text-xs sm:text-sm mb-4 sm:mb-6 max-w-md mx-auto">
                     The simplest, most dynamic way to manage, discover, and host world-class events in your local city. Let's make memories together.

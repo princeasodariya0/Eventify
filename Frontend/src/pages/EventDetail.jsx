@@ -80,7 +80,7 @@ const EventDetail = () => {
   const isSoldOut = event.availableSeats <= 0;
 
   return (
-    <div className="max-w-4xl mx-auto bg-white rounded-xl sm:rounded-2xl shadow-xl overflow-hidden mt-4 sm:mt-8 mx-2 sm:mx-0">
+    <div className="max-w-4xl mx-auto bg-white rounded-xl sm:rounded-2xl shadow-xl overflow-hidden mt-4 sm:mt-8 mx-2 sm:mx-0 border border-gray-100">
       {event.image ? (
         <img
           src={event.image}
@@ -88,7 +88,7 @@ const EventDetail = () => {
           className="w-full h-48 sm:h-80 object-cover"
         />
       ) : (
-        <div className="w-full h-40 sm:h-64 bg-gray-900 flex items-center justify-center text-white/50 text-3xl sm:text-6xl font-black uppercase tracking-widest">
+        <div className="w-full h-40 sm:h-64 bg-gradient-to-r from-indigo-600 to-purple-600 flex items-center justify-center text-white text-3xl sm:text-6xl font-black uppercase tracking-widest">
           {event.category}
         </div>
       )}
@@ -96,7 +96,7 @@ const EventDetail = () => {
       <div className="p-5 sm:p-8 md:p-12">
         <div className="flex flex-col gap-6">
           <div>
-            <div className="inline-block bg-gray-200 text-gray-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide mb-3">
+            <div className="inline-block bg-gradient-to-r from-indigo-100 to-purple-100 text-purple-700 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide mb-3">
               {event.category}
             </div>
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold text-gray-900 mb-4">
@@ -107,14 +107,14 @@ const EventDetail = () => {
             </p>
           </div>
 
-          <div className="bg-gray-50 p-5 sm:p-6 rounded-xl border border-gray-100 w-full shadow-sm">
+          <div className="bg-gradient-to-br from-purple-50 to-pink-50 p-5 sm:p-6 rounded-xl border border-purple-100 w-full shadow-sm">
             <h3 className="text-lg sm:text-xl font-bold text-gray-800 mb-5">
               Booking Details
             </h3>
 
             <div className="space-y-4 mb-6">
               <div className="flex items-center gap-3 sm:gap-4 text-gray-600">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-900 shrink-0">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 flex items-center justify-center text-white shrink-0">
                   <FaMoneyBillWave />
                 </div>
                 <div>
@@ -123,7 +123,7 @@ const EventDetail = () => {
                   </p>
                   <p className="font-bold text-gray-800 text-sm sm:text-base md:text-lg">
                     {event.ticketPrice === 0 ? (
-                      <span className="text-green-500">Free</span>
+                      <span className="text-green-600">Free</span>
                     ) : (
                       `₹${event.ticketPrice}`
                     )}
@@ -132,7 +132,7 @@ const EventDetail = () => {
               </div>
 
               <div className="flex items-center gap-3 sm:gap-4 text-gray-600">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-900 shrink-0">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-r from-purple-600 to-pink-500 flex items-center justify-center text-white shrink-0">
                   <FaChair />
                 </div>
                 <div>
@@ -153,7 +153,7 @@ const EventDetail = () => {
               </div>
 
               <div className="flex items-center gap-3 sm:gap-4 text-gray-600">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-900 shrink-0">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-r from-pink-500 to-red-500 flex items-center justify-center text-white shrink-0">
                   <FaCalendarAlt />
                 </div>
                 <div>
@@ -167,7 +167,7 @@ const EventDetail = () => {
               </div>
 
               <div className="flex items-center gap-3 sm:gap-4 text-gray-600">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-900 shrink-0">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-r from-indigo-500 to-purple-500 flex items-center justify-center text-white shrink-0">
                   <FaMapMarkerAlt />
                 </div>
                 <div>
@@ -188,7 +188,7 @@ const EventDetail = () => {
                   type="text"
                   required
                   placeholder="6-digit code"
-                  className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-gray-700 transition shadow-sm font-bold tracking-widest text-center text-sm sm:text-base md:text-lg"
+                  className="w-full px-3 sm:px-4 py-2.5 sm:py-3 rounded-xl border border-purple-200 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 transition shadow-sm font-bold tracking-widest text-center text-sm sm:text-base md:text-lg"
                   value={otp}
                   onChange={(e) => setOtp(e.target.value)}
                   maxLength="6"
@@ -202,7 +202,7 @@ const EventDetail = () => {
               className={`w-full py-3 sm:py-4 px-4 sm:px-6 rounded-xl font-bold text-sm sm:text-base md:text-lg transition shadow-lg ${
                 isSoldOut
                   ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-                  : "bg-gray-900 hover:bg-black text-white hover:shadow-xl hover:-translate-y-1"
+                  : "bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-purple-700 hover:to-pink-600 text-white hover:shadow-purple-200 hover:-translate-y-1"
               }`}
             >
               {bookingLoading

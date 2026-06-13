@@ -112,18 +112,18 @@ const AdminDashboard = () => {
 
   return (
     <div className="max-w-7xl mx-auto px-2 sm:px-4">
-      <div className="bg-black text-white rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-8 mb-6 sm:mb-8 shadow-lg flex flex-col justify-between items-center gap-5 text-center">
+      <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white rounded-xl sm:rounded-2xl p-5 sm:p-6 md:p-8 mb-6 sm:mb-8 shadow-lg flex flex-col justify-between items-center gap-5 text-center">
         <div>
           <h1 className="text-xl sm:text-2xl md:text-3xl font-extrabold mb-2">
             Admin Dashboard
           </h1>
-          <p className="text-gray-300 text-sm sm:text-base">
+          <p className="text-gray-200 text-sm sm:text-base">
             Manage events and manually confirm bookings.
           </p>
         </div>
         <button
           onClick={() => setShowEventForm(!showEventForm)}
-          className="w-full sm:w-auto bg-white text-black font-bold py-2.5 sm:py-3 px-4 sm:px-6 rounded-lg hover:bg-gray-100 transition shadow-md text-sm sm:text-base"
+          className="w-full sm:w-auto bg-white text-purple-700 font-bold py-2.5 sm:py-3 px-4 sm:px-6 rounded-lg hover:bg-pink-50 transition shadow-md text-sm sm:text-base"
         >
           {showEventForm ? "Cancel Creation" : "+ Create New Event"}
         </button>
@@ -146,7 +146,7 @@ const AdminDashboard = () => {
               )}
             </h3>
           </div>
-          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 text-green-500 rounded-full flex items-center justify-center text-lg sm:text-xl font-bold">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-indigo-100 to-purple-100 text-purple-600 rounded-full flex items-center justify-center text-lg sm:text-xl font-bold">
             ₹
           </div>
         </div>
@@ -168,7 +168,7 @@ const AdminDashboard = () => {
               }
             </h3>
           </div>
-          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 text-blue-500 rounded-full flex items-center justify-center text-lg sm:text-xl font-bold">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-purple-100 to-pink-100 text-pink-600 rounded-full flex items-center justify-center text-lg sm:text-xl font-bold">
             👤
           </div>
         </div>
@@ -181,7 +181,7 @@ const AdminDashboard = () => {
               {bookings.filter((b) => b.status === "pending").length}
             </h3>
           </div>
-          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-yellow-100 text-yellow-600 rounded-full flex items-center justify-center text-lg sm:text-xl font-bold">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-pink-100 to-red-100 text-red-600 rounded-full flex items-center justify-center text-lg sm:text-xl font-bold">
             ⏳
           </div>
         </div>
@@ -200,7 +200,7 @@ const AdminDashboard = () => {
               required
               type="text"
               placeholder="Event Title"
-              className="border px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg focus:ring-2 focus:ring-gray-700 outline-none transition text-sm sm:text-base"
+              className="border border-gray-200 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition text-sm sm:text-base"
               value={formData.title}
               onChange={(e) =>
                 setFormData({ ...formData, title: e.target.value })
@@ -210,7 +210,7 @@ const AdminDashboard = () => {
               required
               type="text"
               placeholder="Category (e.g., Tech, Music)"
-              className="border px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg focus:ring-2 focus:ring-gray-700 outline-none transition text-sm sm:text-base"
+              className="border border-gray-200 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition text-sm sm:text-base"
               value={formData.category}
               onChange={(e) =>
                 setFormData({ ...formData, category: e.target.value })
@@ -219,7 +219,7 @@ const AdminDashboard = () => {
             <input
               required
               type="date"
-              className="border px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg focus:ring-2 focus:ring-gray-700 outline-none transition text-sm sm:text-base"
+              className="border border-gray-200 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition text-sm sm:text-base"
               value={formData.date}
               onChange={(e) =>
                 setFormData({ ...formData, date: e.target.value })
@@ -229,7 +229,7 @@ const AdminDashboard = () => {
               required
               type="text"
               placeholder="Location"
-              className="border px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg focus:ring-2 focus:ring-gray-700 outline-none transition text-sm sm:text-base"
+              className="border border-gray-200 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition text-sm sm:text-base"
               value={formData.location}
               onChange={(e) =>
                 setFormData({ ...formData, location: e.target.value })
@@ -239,7 +239,7 @@ const AdminDashboard = () => {
               required
               type="number"
               placeholder="Total Seats"
-              className="border px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg focus:ring-2 focus:ring-gray-700 outline-none transition text-sm sm:text-base"
+              className="border border-gray-200 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition text-sm sm:text-base"
               value={formData.totalSeats}
               onChange={(e) =>
                 setFormData({ ...formData, totalSeats: e.target.value })
@@ -249,7 +249,7 @@ const AdminDashboard = () => {
               required
               type="number"
               placeholder="Ticket Price (0 for free)"
-              className="border px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg focus:ring-2 focus:ring-gray-700 outline-none transition text-sm sm:text-base"
+              className="border border-gray-200 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition text-sm sm:text-base"
               value={formData.ticketPrice}
               onChange={(e) =>
                 setFormData({ ...formData, ticketPrice: e.target.value })
@@ -260,7 +260,7 @@ const AdminDashboard = () => {
               <input
                 type="text"
                 placeholder="Image URL (Provide any direct link to an image)"
-                className="w-full border px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg focus:ring-2 focus:ring-gray-700 outline-none transition text-sm sm:text-base"
+                className="w-full border border-gray-200 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition text-sm sm:text-base"
                 value={formData.image}
                 onChange={(e) =>
                   setFormData({ ...formData, image: e.target.value })
@@ -271,7 +271,7 @@ const AdminDashboard = () => {
             <textarea
               required
               placeholder="Event Description"
-              className="border px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg md:col-span-2 h-28 sm:h-32 focus:ring-2 focus:ring-gray-700 outline-none transition text-sm sm:text-base"
+              className="border border-gray-200 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg md:col-span-2 h-28 sm:h-32 focus:ring-2 focus:ring-purple-500 focus:border-purple-500 outline-none transition text-sm sm:text-base"
               value={formData.description}
               onChange={(e) =>
                 setFormData({ ...formData, description: e.target.value })
@@ -279,7 +279,7 @@ const AdminDashboard = () => {
             />
             <button
               type="submit"
-              className="md:col-span-2 bg-gray-900 text-white font-bold py-2.5 sm:py-3 mt-1 sm:mt-2 rounded-lg hover:bg-black transition shadow-md text-sm sm:text-base"
+              className="md:col-span-2 bg-gradient-to-r from-indigo-600 to-purple-600 text-white font-bold py-2.5 sm:py-3 mt-1 sm:mt-2 rounded-lg hover:from-purple-700 hover:to-pink-600 transition shadow-md text-sm sm:text-base"
             >
               Publish Event
             </button>
@@ -290,7 +290,7 @@ const AdminDashboard = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8">
         <div className="flex flex-col">
           <h2 className="text-lg sm:text-2xl font-bold mb-4 sm:mb-6 text-gray-800 flex items-center gap-2 sm:gap-3">
-            <span className="flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gray-100 text-gray-600 text-xs sm:text-sm">
+            <span className="flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white text-xs sm:text-sm">
               {events.length}
             </span>
             All Events
@@ -305,7 +305,7 @@ const AdminDashboard = () => {
                 events.map((event) => (
                   <li
                     key={event._id}
-                    className="p-4 sm:p-5 flex flex-col justify-between items-start gap-3 hover:bg-gray-50 transition border-b border-gray-100 last:border-0"
+                    className="p-4 sm:p-5 flex flex-col justify-between items-start gap-3 hover:bg-purple-50 transition border-b border-gray-100 last:border-0"
                   >
                     <div className="w-full">
                       <h4 className="font-bold text-gray-900 mb-1 leading-tight text-sm sm:text-base">
@@ -313,7 +313,7 @@ const AdminDashboard = () => {
                       </h4>
                       <div className="flex flex-wrap items-center gap-2 sm:gap-3 text-xs sm:text-sm text-gray-500">
                         <span className="flex items-center gap-1 font-medium">
-                          <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-blue-500"></div>{" "}
+                          <div className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-purple-500"></div>{" "}
                           {new Date(event.date).toLocaleDateString()}
                         </span>
                         <span className="flex items-center gap-1 font-medium">
@@ -339,7 +339,7 @@ const AdminDashboard = () => {
 
         <div className="flex flex-col">
           <h2 className="text-lg sm:text-2xl font-bold mb-4 sm:mb-6 text-gray-800 flex items-center gap-2 sm:gap-3">
-            <span className="flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-yellow-100 text-yellow-700 text-xs sm:text-sm font-bold">
+            <span className="flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 text-white text-xs sm:text-sm font-bold">
               {bookings.length}
             </span>
             Booking Requests
@@ -354,7 +354,7 @@ const AdminDashboard = () => {
                 bookings.map((booking) => (
                   <li
                     key={booking._id}
-                    className={`p-4 sm:p-6 hover:bg-gray-50 transition border-l-4 ${booking.status === "pending" ? "border-l-yellow-400" : booking.status === "confirmed" ? "border-l-green-400" : "border-l-red-400"}`}
+                    className={`p-4 sm:p-6 hover:bg-purple-50 transition border-l-4 ${booking.status === "pending" ? "border-l-yellow-400" : booking.status === "confirmed" ? "border-l-green-400" : "border-l-red-400"}`}
                   >
                     <div className="flex justify-between items-start mb-3">
                       <h4 className="font-bold text-gray-900 text-base sm:text-lg leading-tight flex-1 mr-2">
@@ -375,7 +375,7 @@ const AdminDashboard = () => {
                         )}
                       </div>
                     </div>
-                    <div className="bg-gray-50 rounded-lg p-3 sm:p-4 mb-3 border border-gray-100 text-xs sm:text-sm">
+                    <div className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-lg p-3 sm:p-4 mb-3 border border-purple-100 text-xs sm:text-sm">
                       <p className="text-gray-700 flex items-center gap-2 mb-1">
                         <span className="font-bold w-14 sm:w-16 text-gray-500 uppercase text-[10px] sm:text-xs">
                           User:
@@ -406,7 +406,7 @@ const AdminDashboard = () => {
                         </span>
                       </p>
                       {booking.eventId && (
-                        <p className="text-gray-700 flex items-center gap-2 mt-2 pt-2 border-t border-gray-200">
+                        <p className="text-gray-700 flex items-center gap-2 mt-2 pt-2 border-t border-purple-200">
                           <span className="font-bold w-14 sm:w-16 text-gray-500 uppercase text-[10px] sm:text-xs">
                             Seats:
                           </span>
