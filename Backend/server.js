@@ -19,12 +19,10 @@ app.use(
     origin: [
       "http://localhost:5173",
       "http://localhost:5174",
-      "http://localhost:3000",
       process.env.RENDER_DOMAIN,
       process.env.VERCEL_DOMAIN,
     ],
     credentials: true,
-    allowedHeaders: ["Content-Type", "Authorization"],
   }),
 );
 app.use(express.json());
