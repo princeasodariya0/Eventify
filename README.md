@@ -1,6 +1,16 @@
 # Eventify - Full-Stack Event Booking Platform
 
-Eventify is a full-stack MERN application that allows users to seamlessly browse, register, and pay natively without any third party tools. It features an administrative dashboard for event organizers to create and manage free and paid events. All bookings can be managed manually by an admin to handle payments directly.
+Eventify is a full-stack MERN application that allows users to seamlessly browse, register, and book events. It features an administrative dashboard for event organizers to create and manage free and paid events. All bookings can be managed manually by an admin to handle payments directly.
+
+## Table of Contents
+- [Features](#features)
+- [Tech Stack](#tech-stack)
+- [Project Structure](#project-structure)
+- [Prerequisites](#prerequisites)
+- [Installation](#installation)
+- [Environment Variables](#environment-variables)
+- [Running the Application](#running-the-application)
+- [License](#license)
 
 ## Features
 - **User Authentication**: Secure login & registration with JWT and bcrypt.
@@ -8,27 +18,75 @@ Eventify is a full-stack MERN application that allows users to seamlessly browse
   - Mandatory Email OTP to activate your account upon Registration (or delayed login attempts).
   - Mandatory Email OTP to finalize and secure event ticket booking.
 - **Role-Based Access**: 
-  - **Admin**: Create, edit, and delete events. Confirm and reject all incoming booking requests, mark them as 'Paid' or 'Not Paid'. Access is strictly locked to database-flagged users only.
-  - **User**: Browse events, submit ticket booking requests via OTP, view personal dashboard pending status, and cancel bookings.
+  - **Admin**: Create, edit, and delete events. Confirm and reject all incoming booking requests, mark them as 'Paid' or 'Not Paid'.
+  - **User**: Browse events, submit ticket booking requests via OTP, view personal dashboard, and cancel bookings.
 - **Event Management**: Create free and paid events with detailed descriptions, external image URLs, dates, categories, and seating capacity.
 - **Smart Booking System**:
   - Mandatory 2FA OTP to authorize a booking request.
-  - All booking requests (both free and paid) enter a secure 'Pending' queue for Admin verification.
-  - Seat availability accurately updates and securely validates against overbooking logic.
-- **Admin Analytics Dashboard**: Track live data such as Pending Requests, Total Revenue, and Total Confirmed Paid Clients directly from the admin panel.
-- **Email Notifications**: Automated email delivery upon successful booking confirmation using Nodemailer.
-- **Sleek UI/UX**: Built entirely with React, Tailwind CSS, and polished with micro-interactions.
+  - All booking requests enter a secure 'Pending' queue for Admin verification.
+  - Seat availability accurately updates and validates against overbooking.
+- **Admin Analytics Dashboard**: Track live data such as Pending Requests, Total Revenue, and Total Confirmed Paid Clients.
+- **Email Notifications**: Professional automated email delivery using Nodemailer.
+- **Responsive UI/UX**: Built entirely with React, Tailwind CSS, and fully responsive for mobile and desktop.
 
----
+## Tech Stack
+- **Frontend**: React, React Router, Tailwind CSS, Vite, React Icons, React Toastify
+- **Backend**: Node.js, Express, MongoDB, Mongoose, JWT, Bcrypt, Nodemailer
+- **Database**: MongoDB (local or MongoDB Atlas)
 
-## 🚀 Setup Instructions
+## Project Structure
+```
+Eventify/
+├── Backend/
+│   ├── controllers/
+│   ├── middleware/
+│   ├── models/
+│   ├── routes/
+│   ├── utils/
+│   ├── package.json
+│   └── server.js
+└── Frontend/
+    ├── public/
+    ├── src/
+    │   ├── assets/
+    │   ├── components/
+    │   ├── context/
+    │   ├── pages/
+    │   ├── utils/
+    │   ├── App.jsx
+    │   └── main.jsx
+    ├── index.html
+    └── package.json
+```
 
-### Prerequisites
-Make sure you have [Node.js](https://nodejs.org/) installed on your machine.
-You will also need a MongoDB database (e.g., [MongoDB Atlas Free Tier](https://www.mongodb.com/cloud/atlas/register)).
+## Prerequisites
+Make sure you have the following installed:
+- [Node.js](https://nodejs.org/) (v24.11.1 or later)
+- [MongoDB](https://www.mongodb.com/) (local or [MongoDB Atlas Free Tier](https://www.mongodb.com/cloud/atlas/register))
 
-### 1. Environment Variables Configuration
-Navigate to `server/.env` and fill in the necessary keys:
+## Installation
+
+### 1. Clone the Repository
+```bash
+git clone https://github.com/princeasodariya0/Eventify.git
+cd Eventify
+```
+
+### 2. Backend Setup
+```bash
+cd Backend
+npm install
+```
+
+### 3. Frontend Setup
+```bash
+cd ../Frontend
+npm install
+```
+
+## Environment Variables
+Create a `.env` file in the `Backend/` directory with the following variables:
+
 ```env
 MONGO_URI=your_mongodb_connection_string
 JWT_SECRET=supersecretjwtkey_eventify
@@ -36,48 +94,24 @@ EMAIL_USER=your_gmail_address
 EMAIL_PASS=your_gmail_app_password
 PORT=5000
 ```
-> **Note**: For `EMAIL_PASS`, you need to generate an "App Password" from your Google Account settings, standard passwords won't work due to 2FA.
 
-### 2. Run from Outer Folder (Single Terminal)
-You can now manage both backend and frontend from the project root:
+> **Note**: For `EMAIL_PASS`, you need to generate an "App Password" from your Google Account settings (standard passwords won't work due to 2FA).
 
+## Running the Application
+
+### Backend (Terminal 1)
 ```bash
-# from Eventify root
-npm install
-npm run install:all
+cd Backend
+npm start
+```
+The backend server will run on `http://localhost:5000`
+
+### Frontend (Terminal 2)
+```bash
+cd Frontend
 npm run dev
 ```
+The frontend will run on a local port provided by Vite, typically `http://localhost:5173`
 
-- `npm run dev` starts both `server` and `client` together using `concurrently`.
-- `npm run dev:all` installs dependencies (server + client) and starts both in one command.
-- `npm run start` runs backend `start` + frontend `preview` together.
-
-### 3. Install Dependencies
-Open two separate terminals for the backend and frontend.
-
-**Backend Terminal:**
-```bash
-cd server
-npm install --legacy-peer-deps
-```
-
-**Frontend Terminal:**
-```bash
-cd client
-npm install
-```
-
-### 4. Run the Application Local Servers
-**Run Backend:**
-```bash
-cd server
-npm run dev
-```
-*(Server will run on `http://localhost:5000`)*
-
-**Run Frontend:**
-```bash
-cd client
-npm run dev
-```
-*(Client will run on a local port provided by Vite, typically `http://localhost:5173`)*
+## License
+ISC
