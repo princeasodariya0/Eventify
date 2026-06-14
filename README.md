@@ -104,14 +104,12 @@ PORT=5000
 cd Backend
 npm start
 ```
-The backend server will run on `http://localhost:5000`
 
 ### Frontend (Terminal 2)
 ```bash
 cd Frontend
 npm run dev
 ```
-The frontend will run on a local port provided by Vite, typically `http://localhost:5173`
 
 ## License
 ISC
