@@ -101,7 +101,13 @@ const UserDashboard = () => {
                                         <div className="text-xs sm:text-sm text-gray-500 mb-3 sm:mb-4 space-y-1">
                                             <p><strong className="text-gray-700">Date:</strong> {new Date(booking.eventId.date).toLocaleDateString()}</p>
                                             <p><strong className="text-gray-700">Amount:</strong> {booking.amount === 0 ? 'Free' : `₹${booking.amount}`}</p>
-                                            <p><strong className="text-gray-700">Requested:</strong> {new Date(booking.bookedAt).toLocaleDateString()}</p>
+                                            <p><strong className="text-gray-700">Requested:</strong> {new Date(booking.bookedAt).toLocaleString('en-GB', {
+                                                day: '2-digit',
+                                                month: '2-digit',
+                                                year: 'numeric',
+                                                hour: '2-digit',
+                                                minute: '2-digit'
+                                            })}</p>
                                         </div>
                                     </>
                                 ) : (
