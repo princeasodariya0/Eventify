@@ -8,7 +8,6 @@ const Login = () => {
     const [password, setPassword] = useState('');
     const [otp, setOtp] = useState('');
     const [showOTP, setShowOTP] = useState(false);
-    const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
     const { login, verifyOTP } = useContext(AuthContext);
@@ -17,7 +16,6 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        setError('');
         try {
             if (!showOTP) {
                 const data = await login(email, password);
@@ -33,9 +31,12 @@ const Login = () => {
         } catch (err) {
             if (err.needsVerification) {
                 setShowOTP(true);
-                setError('Account not verified. A new OTP has been sent to your email.');
+                if (err.emailSent) {
+                    toast.info('A new OTP has been sent to your email!');
+                } else {
+                    toast.warning('Email failed to send! Check backend console for OTP.');
+                }
             } else {
-                setError(typeof err === 'string' ? err : err.message || 'Login failed');
                 toast.error(typeof err === 'string' ? err : err.message || 'Login failed');
             }
         } finally {
@@ -49,8 +50,6 @@ const Login = () => {
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-2">Welcome Back</h2>
                 <p className="text-gray-500 text-sm sm:text-base">Sign in to your Eventify account</p>
             </div>
-
-            {error && <div className="bg-red-50 text-red-600 p-3 rounded-lg mb-6 text-center shadow-inner border border-red-100 text-sm">{error}</div>}
 
             <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
                 {!showOTP ? (

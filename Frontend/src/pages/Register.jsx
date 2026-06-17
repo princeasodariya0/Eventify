@@ -9,7 +9,6 @@ const Register = () => {
     const [password, setPassword] = useState('');
     const [otp, setOtp] = useState('');
     const [showOTP, setShowOTP] = useState(false);
-    const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
     const { register, verifyOTP } = useContext(AuthContext);
@@ -18,13 +17,15 @@ const Register = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        setError('');
         try {
             if (!showOTP) {
                 const data = await register(name, email, password);
-                toast.success(data?.message || 'OTP sent to your email!');
+                if (data?.emailSent) {
+                    toast.success(data?.message || 'OTP sent to your email!');
+                } else {
+                    toast.warning(data?.message || 'Email failed to send! Check backend console for OTP.');
+                }
                 setShowOTP(true);
-                setError('');
             } else {
                 await verifyOTP(email, otp);
                 toast.success('Account created and verified successfully!');
@@ -32,7 +33,6 @@ const Register = () => {
             }
         } catch (err) {
             const errorMsg = typeof err === 'string' ? err : err.message || 'Registration failed';
-            setError(errorMsg);
             toast.error(errorMsg);
         } finally {
             setLoading(false);
@@ -45,8 +45,6 @@ const Register = () => {
                 <h2 className="text-2xl sm:text-3xl font-extrabold text-gray-900 mb-2">Create an Account</h2>
                 <p className="text-gray-500 text-sm sm:text-base">Join Eventify today</p>
             </div>
-
-            {error && <div className="bg-red-50 text-red-600 p-3 rounded-lg mb-6 text-center shadow-inner border border-red-100 text-sm">{error}</div>}
 
             <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
                 {!showOTP ? (

@@ -49,16 +49,30 @@ export const register = async (req, res) => {
     action: "account_verification",
   });
 
-  await sendOTPEmail(
-    email,
-    otp,
-    "account_verification"
-  );
+  let emailSent = true;
+  let emailErrorMsg = "";
+
+  // Send OTP email
+  try {
+    await sendOTPEmail(
+      email,
+      otp,
+      "account_verification"
+    );
+  } catch (emailError) {
+    emailSent = false;
+    emailErrorMsg = emailError.message;
+    console.error("⚠️ Failed to send OTP email:", emailErrorMsg);
+  }
 
   res.status(201).json({
     success: true,
-    message: "OTP sent to email. Please verify.",
+    message: emailSent 
+      ? "OTP sent to email. Please verify." 
+      : "Account created! OTP email failed to send (check backend console for OTP).",
     email: user.email,
+    emailSent: emailSent,
+    emailError: emailErrorMsg
   });
 };
 
@@ -103,17 +117,33 @@ export const login = async (req, res) => {
       action: "account_verification",
     });
 
-    await sendOTPEmail(
-      user.email,
-      otp,
-      "account_verification"
-    );
+    let emailSent = true;
+    let emailErrorMsg = "";
+
+    // Send OTP email, but don't block if it fails
+    try {
+      await sendOTPEmail(
+        user.email,
+        otp,
+        "account_verification"
+      );
+    } catch (emailError) {
+      emailSent = false;
+      emailErrorMsg = emailError.message;
+      console.error("⚠️ Failed to send OTP email:", emailErrorMsg);
+      // For testing: log OTP to console
+      console.log(`🔑 TEST OTP for ${user.email}: ${otp}`);
+    }
 
     return res.status(403).json({
       success: false,
-      message: "Account not verified",
+      message: emailSent 
+        ? "Account not verified" 
+        : "Account not verified! OTP email failed to send (check backend console for OTP).",
       needsVerification: true,
       email: user.email,
+      emailSent: emailSent,
+      emailError: emailErrorMsg
     });
   }
 
