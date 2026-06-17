@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import Booking from "./Booking.js";
 
 const userSchema = new mongoose.Schema(
   {

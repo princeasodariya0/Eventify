@@ -38,6 +38,11 @@ export const register = async (req, res) => {
   const otp = generateOTP();
   const hashedOTP = await bcrypt.hash(otp, 10);
 
+  await OTP.findOneAndDelete({
+    email: user.email,
+    action: "account_verification",
+  });
+
   await OTP.create({
     email,
     otp: hashedOTP,

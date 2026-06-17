@@ -8,7 +8,6 @@ dotenv.config();
 import authRoutes from "./routes/auth.js";
 import eventRoutes from "./routes/events.js";
 import bookingRoutes from "./routes/bookings.js";
-import { seedDatabase } from "./seed.js";
 import ExpressError from "./utils/ExpressError.js";
 
 const app = express();
@@ -39,7 +38,6 @@ main()
 
 async function main() {
   await mongoose.connect(process.env.MONGO_URI);
-  // seedDatabase();
 }
 
 app.use((req, res, next) => {

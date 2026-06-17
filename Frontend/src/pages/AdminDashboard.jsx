@@ -97,8 +97,8 @@ const AdminDashboard = () => {
     } catch (error) {
       toast.error(
         error.response?.data?.message ||
-          error.message ||
-          "Error cancelling booking"
+        error.message ||
+        "Error cancelling booking"
       );
     }
   };
@@ -402,7 +402,13 @@ const AdminDashboard = () => {
                           Date:
                         </span>
                         <span>
-                          {new Date(booking.bookedAt).toLocaleString()}
+                          {new Date(booking.bookedAt).toLocaleString('en-GB', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })}
                         </span>
                       </p>
                       {booking.eventId && (
