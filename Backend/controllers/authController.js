@@ -52,7 +52,6 @@ export const register = async (req, res) => {
   let emailSent = true;
   let emailErrorMsg = "";
 
-  // Send OTP email
   try {
     await sendOTPEmail(
       email,
@@ -120,7 +119,6 @@ export const login = async (req, res) => {
     let emailSent = true;
     let emailErrorMsg = "";
 
-    // Send OTP email, but don't block if it fails
     try {
       await sendOTPEmail(
         user.email,
@@ -131,8 +129,6 @@ export const login = async (req, res) => {
       emailSent = false;
       emailErrorMsg = emailError.message;
       console.error("⚠️ Failed to send OTP email:", emailErrorMsg);
-      // For testing: log OTP to console
-      console.log(`🔑 TEST OTP for ${user.email}: ${otp}`);
     }
 
     return res.status(403).json({
