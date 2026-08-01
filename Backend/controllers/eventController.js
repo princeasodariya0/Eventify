@@ -6,6 +6,7 @@ export const getEvents = async (req, res) => {
     "createdBy",
     "name email"
   );
+  console.log(events);
 
   if (req.query.search) {
     const filteredEvents = events.filter((event) =>

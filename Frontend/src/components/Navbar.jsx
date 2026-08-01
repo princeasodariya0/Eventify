@@ -21,15 +21,23 @@ const Navbar = () => {
                     <NavLink to="/" className="text-white text-2xl font-black flex items-center gap-2" onClick={() => setIsMenuOpen(false)}>
                         <FaTicketAlt /> <span className="bg-clip-text text-transparent bg-gradient-to-r from-yellow-300 to-pink-200">Eventify</span>
                     </NavLink>
-                    
+
                     {/* Desktop Menu */}
                     <div className="hidden md:flex items-center gap-6">
                         <NavLink to="/" className="text-gray-100 hover:text-white transition cursor-pointer font-medium">Events</NavLink>
                         {user ? (
-                            <>
-                                <NavLink to={user.role === 'admin' ? '/admin' : '/dashboard'} className="text-gray-100 hover:text-white transition font-medium">Dashboard</NavLink>
-                                <button onClick={handleLogout} className="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg transition font-medium backdrop-blur-sm">Logout</button>
-                            </>
+                            user.role === 'admin' ? (
+                                <>
+                                    <NavLink to="/dashboard" className="text-gray-100 hover:text-white transition font-medium">Dashboard</NavLink>
+                                    <NavLink to="/admin" className="text-gray-100 hover:text-white transition font-medium">Admin Dashboard</NavLink>
+                                    <button onClick={handleLogout} className="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg transition font-medium backdrop-blur-sm">Logout</button>
+                                </>
+                            ) : (
+                                <>
+                                    <NavLink to="/dashboard" className="text-gray-100 hover:text-white transition font-medium">Dashboard</NavLink>
+                                    <button onClick={handleLogout} className="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg transition font-medium backdrop-blur-sm">Logout</button>
+                                </>
+                            )
                         ) : (
                             <>
                                 <NavLink to="/login" className="text-gray-100 hover:text-white transition font-medium">Login</NavLink>
@@ -37,25 +45,33 @@ const Navbar = () => {
                             </>
                         )}
                     </div>
-                    
+
                     {/* Mobile Toggle Button */}
-                    <button 
+                    <button
                         onClick={() => setIsMenuOpen(!isMenuOpen)}
                         className="md:hidden text-white text-2xl focus:outline-none"
                     >
                         {isMenuOpen ? <FaTimes /> : <FaBars />}
                     </button>
                 </div>
-                
+
                 {/* Mobile Menu */}
                 {isMenuOpen && (
                     <div className="md:hidden pb-6 space-y-4">
                         <NavLink to="/" className="block text-gray-100 hover:text-white transition py-2 text-center font-medium" onClick={() => setIsMenuOpen(false)}>Events</NavLink>
                         {user ? (
-                            <>
-                                <NavLink to={user.role === 'admin' ? '/admin' : '/dashboard'} className="block text-gray-100 hover:text-white transition py-2 text-center font-medium" onClick={() => setIsMenuOpen(false)}>Dashboard</NavLink>
-                                <button onClick={handleLogout} className="w-full bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg transition font-medium backdrop-blur-sm">Logout</button>
-                            </>
+                            user.role === 'admin' ? (
+                                <>
+                                    <NavLink to="/dashboard" className="block text-gray-100 hover:text-white transition py-2 text-center font-medium" onClick={() => setIsMenuOpen(false)}>Dashboard</NavLink>
+                                    <NavLink to="/admin" className="block text-gray-100 hover:text-white transition py-2 text-center font-medium" onClick={() => setIsMenuOpen(false)}>Admin Dashboard</NavLink>
+                                    <button onClick={handleLogout} className="w-full bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg transition font-medium backdrop-blur-sm">Logout</button>
+                                </>
+                            ) : (
+                                <>
+                                    <NavLink to="/dashboard" className="block text-gray-100 hover:text-white transition py-2 text-center font-medium" onClick={() => setIsMenuOpen(false)}>Dashboard</NavLink>
+                                    <button onClick={handleLogout} className="w-full bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg transition font-medium backdrop-blur-sm">Logout</button>
+                                </>
+                            )
                         ) : (
                             <>
                                 <NavLink to="/login" className="block text-gray-100 hover:text-white transition py-2 text-center font-medium" onClick={() => setIsMenuOpen(false)}>Login</NavLink>

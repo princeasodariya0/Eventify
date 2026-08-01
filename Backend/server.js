@@ -31,15 +31,6 @@ app.use("/api/auth", authRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/bookings", bookingRoutes);
 
-// Database Connection
-main()
-  .then(() => console.log("Database connected."))
-  .catch((err) => console.log(err));
-
-async function main() {
-  await mongoose.connect(process.env.MONGO_URI);
-}
-
 app.use((req, res, next) => {
   next(new ExpressError(404, "Page Not Found!"));
 });
@@ -55,4 +46,19 @@ app.use((err, req, res, next) => {
 });
 
 const PORT = process.env.PORT || 2726;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log("Database connected.");
+
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error(error.message);
+    process.exit(1);
+  }
+};
+
+connectDB();
