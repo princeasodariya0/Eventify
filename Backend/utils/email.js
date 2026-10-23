@@ -1,46 +1,56 @@
 import nodemailer from "nodemailer";
-import dotenv from "dotenv";
 import ExpressError from "../utils/ExpressError.js";
 
-dotenv.config();
+let transporter = null;
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  pool: true,
-  maxConnections: 3,
-  maxMessages: 100,
-  connectionTimeout: 10000,
-  greetingTimeout: 10000,
-  socketTimeout: 20000,
-  auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+/**
+ * Initializes the transporter lazily to ensure environment variables are loaded.
+ */
+const getTransporter = () => {
+  if (transporter) return transporter;
 
-// SMTP connection pre-warm: પહેલો mail પણ fast મોકલાય
-transporter.verify((error) => {
-  if (error) {
-    console.error("⚠️ SMTP connection failed:", error.message);
-  } else {
-    console.log("SMTP connection ready.");
+  const user = process.env.EMAIL_USER;
+  const pass = process.env.EMAIL_PASS;
+
+  if (!user || !pass) {
+    console.error("❌ SMTP credentials missing in environment variables (EMAIL_USER/EMAIL_PASS)");
+    return null;
   }
-});
+
+  transporter = nodemailer.createTransport({
+    service: "gmail",
+    pool: true,
+    maxConnections: 3,
+    maxMessages: 100,
+    connectionTimeout: 10000,
+    greetingTimeout: 10000,
+    socketTimeout: 20000,
+    auth: { user, pass },
+  });
+
+  // Verify connection configuration
+  transporter.verify((error) => {
+    if (error) {
+      console.error("⚠️ SMTP connection failed:", error.message);
+    } else {
+      console.log("✅ SMTP connection ready.");
+    }
+  });
+
+  return transporter;
+};
 
 const sendBookingEmail = async (userEmail, userName, eventTitle) => {
-  if (!userEmail) {
-    throw new ExpressError(400, "Email is required");
-  }
+  if (!userEmail) throw new ExpressError(400, "Email is required");
+  if (!eventTitle) throw new ExpressError(400, "Event title is required");
 
-  if (!eventTitle) {
-    throw new ExpressError(400, "Event title is required");
+  const mailTransporter = getTransporter();
+  if (!mailTransporter) {
+    throw new ExpressError(500, "Mail service not configured on server");
   }
 
   try {
-    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-      throw new Error("SMTP credentials missing in environment variables");
-    }
-    await transporter.sendMail({
+    await mailTransporter.sendMail({
       from: `"Eventify Team" <${process.env.EMAIL_USER}>`,
       to: userEmail,
       subject: `Booking Confirmed: ${eventTitle}`,
@@ -77,39 +87,28 @@ const sendBookingEmail = async (userEmail, userName, eventTitle) => {
       `,
     });
   } catch (error) {
+    console.error("Booking email error:", error);
     throw new ExpressError(500, "Failed to send booking email");
   }
 };
 
 const sendOTPEmail = async (userEmail, otp, type) => {
-  if (!userEmail) {
-    throw new ExpressError(400, "Email is required");
-  }
-  if (!otp || otp.length !== 6) {
-    throw new ExpressError(400, "Invalid OTP");
-  }
+  if (!userEmail) throw new ExpressError(400, "Email is required");
+  if (!otp || otp.length !== 6) throw new ExpressError(400, "Invalid OTP");
 
   const allowedTypes = ["account_verification", "event_booking"];
+  if (!allowedTypes.includes(type)) throw new ExpressError(400, "Invalid OTP type");
 
-  if (!allowedTypes.includes(type)) {
-    throw new ExpressError(400, "Invalid OTP type");
+  const mailTransporter = getTransporter();
+  if (!mailTransporter) {
+    throw new ExpressError(500, "Mail service not configured on server");
   }
 
-  const title =
-    type === "account_verification"
-      ? "Verify your Eventify Account"
-      : "Eventify Booking Verification";
-
-  const msg =
-    type === "account_verification"
-      ? "Please use the following OTP to verify your new Eventify account."
-      : "Please use the following OTP to verify and confirm your event booking.";
+  const title = type === "account_verification" ? "Verify your Eventify Account" : "Eventify Booking Verification";
+  const msg = type === "account_verification" ? "Please use the following OTP to verify your new Eventify account." : "Please use the following OTP to verify and confirm your event booking.";
 
   try {
-    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-      throw new Error("SMTP credentials missing in environment variables");
-    }
-    await transporter.sendMail({
+    await mailTransporter.sendMail({
       from: `"Eventify Team" <${process.env.EMAIL_USER}>`,
       to: userEmail,
       subject: title,
@@ -146,6 +145,7 @@ const sendOTPEmail = async (userEmail, otp, type) => {
       `,
     });
   } catch (error) {
+    console.error("OTP email error:", error);
     throw new ExpressError(500, "Failed to send OTP email");
   }
 };

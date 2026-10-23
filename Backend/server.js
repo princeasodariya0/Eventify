@@ -1,9 +1,7 @@
+import "./loadEnv.js";
 import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
-import dotenv from "dotenv";
-
-dotenv.config();
 
 import authRoutes from "./routes/auth.js";
 import eventRoutes from "./routes/events.js";
