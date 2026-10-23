@@ -49,25 +49,31 @@ export const register = async (req, res) => {
     action: "account_verification",
   });
 
-  // Email background માં મોકલાય, response block ન થાય
-  sendOTPEmail(
-    email,
-    otp,
-    "account_verification"
-  ).catch((emailError) => {
+  let emailSent = false;
+
+  try {
+    await sendOTPEmail(
+      email,
+      otp,
+      "account_verification"
+    );
+    emailSent = true;
+  } catch (emailError) {
     console.error(
       "⚠️ Failed to send OTP email:",
       emailError.message,
       "| OTP:",
       otp
     );
-  });
+  }
 
   res.status(201).json({
     success: true,
-    message: "OTP sent to email. Please verify.",
+    message: emailSent
+      ? "OTP sent to email. Please verify."
+      : "Account created, but OTP email could not be sent. Please check your email address and try again.",
     email: user.email,
-    emailSent: true,
+    emailSent,
   });
 };
 
@@ -112,26 +118,32 @@ export const login = async (req, res) => {
       action: "account_verification",
     });
 
-    // Email background માં મોકલાય, response block ન થાય
-    sendOTPEmail(
-      user.email,
-      otp,
-      "account_verification"
-    ).catch((emailError) => {
+    let emailSent = false;
+
+    try {
+      await sendOTPEmail(
+        user.email,
+        otp,
+        "account_verification"
+      );
+      emailSent = true;
+    } catch (emailError) {
       console.error(
         "⚠️ Failed to send OTP email:",
         emailError.message,
         "| OTP:",
         otp
       );
-    });
+    }
 
     return res.status(403).json({
       success: false,
-      message: "Account not verified. OTP sent to your email.",
+      message: emailSent
+        ? "Account not verified. OTP sent to your email."
+        : "Account not verified and OTP email could not be sent. Please try again.",
       needsVerification: true,
       email: user.email,
-      emailSent: true,
+      emailSent,
     });
   }
 
