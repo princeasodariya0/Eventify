@@ -9,15 +9,13 @@ const getTransporter = () => {
   const user = process.env.EMAIL_USER || "eventifyadmin@gmail.com";
   const pass = process.env.EMAIL_PASS || "tvxsghsqtvflczme";
 
-  console.log("DEBUG: Initializing SMTP with user:", user);
+  console.log("DEBUG: V3 - Initializing SMTP with user:", user);
 
   transporter = nodemailer.createTransport({
     service: "gmail",
     auth: { user, pass },
-    connectionTimeout: 40000,
-    greetingTimeout: 40000,
-    socketTimeout: 60000,
-    family: 4, // Still force IPv4
+    family: 4, // Force IPv4 to fix Render ENETUNREACH
+    connectionTimeout: 30000,
   });
 
   transporter.verify((error) => {
