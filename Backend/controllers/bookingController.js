@@ -57,16 +57,6 @@ export const bookEvent = async (req, res) => {
     throw new ExpressError(400, "Invalid or expired OTP");
   }
 
-  const event = await Event.findById(eventId);
-
-  if (!event) {
-    throw new ExpressError(404, "Event not found");
-  }
-
-  if (event.availableSeats <= 0) {
-    throw new ExpressError(400, "No seats available");
-  }
-
   const existingBooking = await Booking.findOne({
     userId: req.user._id,
     eventId,
@@ -76,22 +66,55 @@ export const bookEvent = async (req, res) => {
     throw new ExpressError(400, "Already booked or pending");
   }
 
-  const booking = await Booking.create({
-    userId: req.user._id,
-    eventId,
-    status: "pending",
-    paymentStatus: "not_paid",
-    amount: event.ticketPrice,
-  });
+  const event = await Event.findOneAndUpdate(
+    {
+      _id: eventId,
+      availableSeats: { $gt: 0 },
+    },
+    {
+      $inc: { availableSeats: -1 },
+    },
+    {
+      new: true,
+    }
+  );
 
-  await OTP.deleteOne({
-    _id: validOTP._id,
-  });
+  if (!event) {
+    const eventExists = await Event.exists({ _id: eventId });
+
+    if (!eventExists) {
+      throw new ExpressError(404, "Event not found");
+    }
+
+    throw new ExpressError(400, "No seats available");
+  }
+
+  let booking;
+
+  try {
+    booking = await Booking.create({
+      userId: req.user._id,
+      eventId,
+      status: "pending",
+      paymentStatus: "not_paid",
+      amount: event.ticketPrice,
+    });
+
+    await OTP.deleteOne({
+      _id: validOTP._id,
+    });
+  } catch (error) {
+    await Event.findByIdAndUpdate(eventId, {
+      $inc: { availableSeats: 1 },
+    });
+    throw error;
+  }
 
   res.status(201).json({
     success: true,
     message: "Booking request submitted",
     booking,
+    availableSeats: event.availableSeats,
   });
 };
 
@@ -114,14 +137,8 @@ export const confirmBooking = async (req, res) => {
     throw new ExpressError(400, "Booking already confirmed");
   }
 
-  const event = await Event.findById(booking.eventId._id);
-
-  if (!event) {
-    throw new ExpressError(404, "Event not found");
-  }
-
-  if (event.availableSeats <= 0) {
-    throw new ExpressError(400, "No seats available");
+  if (booking.status === "cancelled") {
+    throw new ExpressError(400, "Cancelled booking cannot be confirmed");
   }
 
   booking.status = "confirmed";
@@ -131,9 +148,6 @@ export const confirmBooking = async (req, res) => {
   }
 
   await booking.save();
-
-  event.availableSeats -= 1;
-  await event.save();
 
   await sendBookingEmail(
     booking.userId.email,
@@ -185,12 +199,14 @@ export const cancelBooking = async (req, res) => {
     throw new ExpressError(400, "Booking already cancelled");
   }
 
-  const wasConfirmed = booking.status === "confirmed";
+  const wasReserved =
+    booking.status === "pending" ||
+    booking.status === "confirmed";
 
   booking.status = "cancelled";
   await booking.save();
 
-  if (wasConfirmed) {
+  if (wasReserved) {
     const event = await Event.findById(booking.eventId);
 
     if (event) {

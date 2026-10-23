@@ -56,7 +56,8 @@ const EventDetail = () => {
         setShowOTP(false);
         setEvent((prev) => ({
           ...prev,
-          availableSeats: prev.availableSeats - 1,
+          availableSeats:
+            res.data?.availableSeats ?? prev.availableSeats - 1,
         }));
         navigate("/payment-success");
       }
