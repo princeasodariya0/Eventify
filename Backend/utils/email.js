@@ -18,14 +18,13 @@ const getTransporter = () => {
   }
 
   transporter = nodemailer.createTransport({
-    service: "gmail",
-    pool: true,
-    maxConnections: 3,
-    maxMessages: 100,
-    connectionTimeout: 10000,
-    greetingTimeout: 10000,
-    socketTimeout: 20000,
+    host: "smtp.gmail.com",
+    port: 465,
+    secure: true, // Use SSL/TLS
     auth: { user, pass },
+    connectionTimeout: 20000, // 20 seconds
+    greetingTimeout: 20000,
+    socketTimeout: 30000,
   });
 
   // Verify connection configuration
