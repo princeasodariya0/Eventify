@@ -1,9 +1,5 @@
 import nodemailer from "nodemailer";
 import ExpressError from "../utils/ExpressError.js";
-import dns from "dns";
-import { promisify } from "util";
-
-const lookup = promisify(dns.lookup);
 
 let transporter = null;
 
@@ -13,30 +9,29 @@ const getTransporter = async () => {
   const user = process.env.EMAIL_USER || "eventifyadmin@gmail.com";
   const pass = process.env.EMAIL_PASS || "tvxsghsqtvflczme";
 
-  try {
-    // V7: Use Port 587 instead of 465, because cloud providers often block 465 but allow 587.
-    const { address } = await lookup("smtp.gmail.com", { family: 4 });
-    console.log(`DEBUG: V7 - Resolved smtp.gmail.com to IPv4: ${address} | Using Port 587`);
+  console.log("DEBUG: V10 - Initializing SMTP (Port 587 + IPv4 Force) with user:", user);
 
+  try {
     transporter = nodemailer.createTransport({
-      host: address,
+      host: "smtp.gmail.com",
       port: 587,
-      secure: false, // Port 587 is STARTTLS
+      secure: false, // Port 587 uses STARTTLS
       auth: { user, pass },
       tls: {
-        servername: "smtp.gmail.com",
-        rejectUnauthorized: false
+        rejectUnauthorized: false,
+        servername: "smtp.gmail.com"
       },
-      connectionTimeout: 40000,
-      greetingTimeout: 40000,
-      socketTimeout: 60000,
+      // Force IPv4 to avoid Render's IPv6 ENETUNREACH issues
+      family: 4,
+      connectionTimeout: 20000,
+      greetingTimeout: 20000,
+      socketTimeout: 30000,
     });
 
-    await transporter.verify();
-    console.log("✅ DEBUG: V7 SMTP Connection Ready.");
+    // Note: We skip full .verify() here and try sending directly to avoid timeout loops on initialization
     return transporter;
   } catch (error) {
-    console.error("❌ DEBUG: V7 SMTP Initialization Failed:", error.message);
+    console.error("❌ DEBUG: V10 SMTP Initialization Failed:", error.message);
     transporter = null;
     return null;
   }
@@ -56,7 +51,7 @@ const sendBookingEmail = async (userEmail, userName, eventTitle) => {
       html: `<h1>Confirmed!</h1><p>Hi ${userName}, your booking for ${eventTitle} is ready.</p>`,
     });
   } catch (error) {
-    console.error("❌ DEBUG: V7 Booking Mail Error:", error);
+    console.error("❌ DEBUG: V10 Booking Mail Error:", error);
     throw new ExpressError(500, "Failed to send booking email");
   }
 };
@@ -70,7 +65,7 @@ const sendOTPEmail = async (userEmail, otp, type) => {
 
   try {
     const sender = process.env.EMAIL_USER || "eventifyadmin@gmail.com";
-    console.log(`DEBUG: V7 Sending OTP to ${userEmail} via ${sender}`);
+    console.log(`DEBUG: V10 Sending OTP to ${userEmail} via ${sender}`);
     
     await mailTransporter.sendMail({
       from: `"Eventify Team" <${sender}>`,
@@ -82,9 +77,11 @@ const sendOTPEmail = async (userEmail, otp, type) => {
         <h1 style="letter-spacing:5px;">${otp}</h1>
       </div>`,
     });
-    console.log("✅ DEBUG: V7 OTP Mail Sent Successfully");
+    console.log("✅ DEBUG: V10 OTP Mail Sent Successfully");
   } catch (error) {
-    console.error("❌ DEBUG: V7 OTP Mail Error Details:", error);
+    console.error("❌ DEBUG: V10 OTP Mail Error Details:", error);
+    // If it fails once, reset transporter to force fresh connection next time
+    transporter = null;
     throw new ExpressError(500, "Failed to send OTP email");
   }
 };
