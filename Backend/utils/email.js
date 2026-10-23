@@ -1,5 +1,12 @@
 import nodemailer from "nodemailer";
 import ExpressError from "../utils/ExpressError.js";
+import dns from "dns";
+
+// CRITICAL: Force Node.js to prioritize IPv4 over IPv6 globally.
+// This fixes the ENETUNREACH error on Render where IPv6 is not available.
+if (dns.setDefaultResultOrder) {
+  dns.setDefaultResultOrder("ipv4first");
+}
 
 let transporter = null;
 
@@ -9,30 +16,21 @@ const getTransporter = () => {
   const user = process.env.EMAIL_USER || "eventifyadmin@gmail.com";
   const pass = process.env.EMAIL_PASS || "tvxsghsqtvflczme";
 
-  console.log("DEBUG: V4 - Initializing SMTP (Forcing IPv4 and Port 587) with user:", user);
+  console.log("DEBUG: V5 - Initializing SMTP (Forcing IPv4 First via DNS) with user:", user);
 
   transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false, // Port 587 uses STARTTLS
+    service: "gmail",
     auth: { user, pass },
-    family: 4, // CRITICAL: Force IPv4 to fix Render ENETUNREACH
     connectionTimeout: 30000,
     greetingTimeout: 30000,
     socketTimeout: 30000,
-    tls: {
-      // Do not fail on invalid certs
-      rejectUnauthorized: false,
-      // Ensure we only use IPv4 for the TLS connection too
-      servername: "smtp.gmail.com"
-    }
   });
 
   transporter.verify((error) => {
     if (error) {
-      console.error("❌ DEBUG: V4 SMTP Verification Failed:", error);
+      console.error("❌ DEBUG: V5 SMTP Verification Failed:", error);
     } else {
-      console.log("✅ DEBUG: V4 SMTP Connection Ready.");
+      console.log("✅ DEBUG: V5 SMTP Connection Ready.");
     }
   });
 
@@ -52,7 +50,7 @@ const sendBookingEmail = async (userEmail, userName, eventTitle) => {
       html: `<h1>Confirmed!</h1><p>Hi ${userName}, your booking for ${eventTitle} is ready.</p>`,
     });
   } catch (error) {
-    console.error("❌ DEBUG: V4 Booking Mail Error:", error);
+    console.error("❌ DEBUG: V5 Booking Mail Error:", error);
     throw new ExpressError(500, "Failed to send booking email");
   }
 };
@@ -65,7 +63,7 @@ const sendOTPEmail = async (userEmail, otp, type) => {
 
   try {
     const sender = process.env.EMAIL_USER || "eventifyadmin@gmail.com";
-    console.log(`DEBUG: V4 Sending OTP to ${userEmail} via ${sender}`);
+    console.log(`DEBUG: V5 Sending OTP to ${userEmail} via ${sender}`);
     
     await mailTransporter.sendMail({
       from: `"Eventify Team" <${sender}>`,
@@ -77,9 +75,9 @@ const sendOTPEmail = async (userEmail, otp, type) => {
         <h1 style="letter-spacing:5px;">${otp}</h1>
       </div>`,
     });
-    console.log("✅ DEBUG: V4 OTP Mail Sent Successfully");
+    console.log("✅ DEBUG: V5 OTP Mail Sent Successfully");
   } catch (error) {
-    console.error("❌ DEBUG: V4 OTP Mail Error Details:", error);
+    console.error("❌ DEBUG: V5 OTP Mail Error Details:", error);
     throw new ExpressError(500, "Failed to send OTP email");
   }
 };
