@@ -60,10 +60,8 @@ export const register = async (req, res) => {
     emailSent = true;
   } catch (emailError) {
     console.error(
-      "⚠️ Failed to send OTP email:",
-      emailError.message,
-      "| OTP:",
-      otp
+      "❌ DEBUG: Detailed Auth Register Mail Error:",
+      emailError
     );
   }
 
@@ -129,10 +127,8 @@ export const login = async (req, res) => {
       emailSent = true;
     } catch (emailError) {
       console.error(
-        "⚠️ Failed to send OTP email:",
-        emailError.message,
-        "| OTP:",
-        otp
+        "❌ DEBUG: Detailed Auth Login Mail Error:",
+        emailError
       );
     }
 
