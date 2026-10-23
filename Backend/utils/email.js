@@ -13,12 +13,16 @@ const getTransporter = () => {
 
   transporter = nodemailer.createTransport({
     host: "smtp.gmail.com",
-    port: 465,
-    secure: true,
+    port: 587,
+    secure: false, // Port 587 uses STARTTLS
     auth: { user, pass },
-    connectionTimeout: 20000,
-    greetingTimeout: 20000,
-    socketTimeout: 30000,
+    connectionTimeout: 40000,
+    greetingTimeout: 40000,
+    socketTimeout: 60000,
+    family: 4, // Force IPv4 to fix ENETUNREACH error on Render
+    tls: {
+      rejectUnauthorized: false,
+    },
   });
 
   transporter.verify((error) => {
