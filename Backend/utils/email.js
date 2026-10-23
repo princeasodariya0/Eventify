@@ -9,8 +9,13 @@ let transporter = null;
 const getTransporter = () => {
   if (transporter) return transporter;
 
-  const user = process.env.EMAIL_USER || "eventifyadmin@gmail.com";
-  const pass = process.env.EMAIL_PASS || "tvxsghsqtvflczme";
+  const user = process.env.EMAIL_USER;
+  const pass = process.env.EMAIL_PASS;
+
+  if (!user || !pass) {
+    console.error("❌ SMTP credentials missing in environment variables (EMAIL_USER/EMAIL_PASS)");
+    return null;
+  }
 
   transporter = nodemailer.createTransport({
     service: "gmail",
@@ -45,9 +50,8 @@ const sendBookingEmail = async (userEmail, userName, eventTitle) => {
   }
 
   try {
-    const sender = process.env.EMAIL_USER || "eventifyadmin@gmail.com";
     await mailTransporter.sendMail({
-      from: `"Eventify Team" <${sender}>`,
+      from: `"Eventify Team" <${process.env.EMAIL_USER}>`,
       to: userEmail,
       subject: `Booking Confirmed: ${eventTitle}`,
       html: `
@@ -104,9 +108,8 @@ const sendOTPEmail = async (userEmail, otp, type) => {
   const msg = type === "account_verification" ? "Please use the following OTP to verify your new Eventify account." : "Please use the following OTP to verify and confirm your event booking.";
 
   try {
-    const sender = process.env.EMAIL_USER || "eventifyadmin@gmail.com";
     await mailTransporter.sendMail({
-      from: `"Eventify Team" <${sender}>`,
+      from: `"Eventify Team" <${process.env.EMAIL_USER}>`,
       to: userEmail,
       subject: title,
       html: `
