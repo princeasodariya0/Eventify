@@ -6,10 +6,25 @@ dotenv.config();
 
 const transporter = nodemailer.createTransport({
   service: "gmail",
+  pool: true,
+  maxConnections: 3,
+  maxMessages: 100,
+  connectionTimeout: 10000,
+  greetingTimeout: 10000,
+  socketTimeout: 20000,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
+});
+
+// SMTP connection pre-warm: પહેલો mail પણ fast મોકલાય
+transporter.verify((error) => {
+  if (error) {
+    console.error("⚠️ SMTP connection failed:", error.message);
+  } else {
+    console.log("SMTP connection ready.");
+  }
 });
 
 const sendBookingEmail = async (userEmail, userName, eventTitle) => {

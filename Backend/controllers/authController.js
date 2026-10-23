@@ -49,29 +49,25 @@ export const register = async (req, res) => {
     action: "account_verification",
   });
 
-  let emailSent = true;
-  let emailErrorMsg = "";
-
-  try {
-    await sendOTPEmail(
-      email,
-      otp,
-      "account_verification"
+  // Email background માં મોકલાય, response block ન થાય
+  sendOTPEmail(
+    email,
+    otp,
+    "account_verification"
+  ).catch((emailError) => {
+    console.error(
+      "⚠️ Failed to send OTP email:",
+      emailError.message,
+      "| OTP:",
+      otp
     );
-  } catch (emailError) {
-    emailSent = false;
-    emailErrorMsg = emailError.message;
-    console.error("⚠️ Failed to send OTP email:", emailErrorMsg);
-  }
+  });
 
   res.status(201).json({
     success: true,
-    message: emailSent 
-      ? "OTP sent to email. Please verify." 
-      : "Account created! OTP email failed to send (check backend console for OTP).",
+    message: "OTP sent to email. Please verify.",
     email: user.email,
-    emailSent: emailSent,
-    emailError: emailErrorMsg
+    emailSent: true,
   });
 };
 
@@ -116,30 +112,26 @@ export const login = async (req, res) => {
       action: "account_verification",
     });
 
-    let emailSent = true;
-    let emailErrorMsg = "";
-
-    try {
-      await sendOTPEmail(
-        user.email,
-        otp,
-        "account_verification"
+    // Email background માં મોકલાય, response block ન થાય
+    sendOTPEmail(
+      user.email,
+      otp,
+      "account_verification"
+    ).catch((emailError) => {
+      console.error(
+        "⚠️ Failed to send OTP email:",
+        emailError.message,
+        "| OTP:",
+        otp
       );
-    } catch (emailError) {
-      emailSent = false;
-      emailErrorMsg = emailError.message;
-      console.error("⚠️ Failed to send OTP email:", emailErrorMsg);
-    }
+    });
 
     return res.status(403).json({
       success: false,
-      message: emailSent 
-        ? "Account not verified" 
-        : "Account not verified! OTP email failed to send (check backend console for OTP).",
+      message: "Account not verified. OTP sent to your email.",
       needsVerification: true,
       email: user.email,
-      emailSent: emailSent,
-      emailError: emailErrorMsg
+      emailSent: true,
     });
   }
 
