@@ -12,17 +12,12 @@ const getTransporter = () => {
   console.log("DEBUG: Initializing SMTP with user:", user);
 
   transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 587,
-    secure: false, // Port 587 uses STARTTLS
+    service: "gmail",
     auth: { user, pass },
     connectionTimeout: 40000,
     greetingTimeout: 40000,
     socketTimeout: 60000,
-    family: 4, // Force IPv4 to fix ENETUNREACH error on Render
-    tls: {
-      rejectUnauthorized: false,
-    },
+    family: 4, // Still force IPv4
   });
 
   transporter.verify((error) => {
