@@ -71,7 +71,7 @@ export const register = async (req, res) => {
     success: true,
     message: emailSent
       ? "OTP sent to email. Please verify."
-      : "Account created, but OTP email could not be sent. Please check your email address and try again.",
+      : "Account created, but we couldn't send the verification email. This is likely a server configuration issue. Please contact support or try again later.",
     email: user.email,
     emailSent,
   });
@@ -140,7 +140,7 @@ export const login = async (req, res) => {
       success: false,
       message: emailSent
         ? "Account not verified. OTP sent to your email."
-        : "Account not verified and OTP email could not be sent. Please try again.",
+        : "Account not verified and we couldn't send the OTP email. This is likely a server configuration issue.",
       needsVerification: true,
       email: user.email,
       emailSent,

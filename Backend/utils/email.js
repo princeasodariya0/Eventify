@@ -37,6 +37,9 @@ const sendBookingEmail = async (userEmail, userName, eventTitle) => {
   }
 
   try {
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      throw new Error("SMTP credentials missing in environment variables");
+    }
     await transporter.sendMail({
       from: `"Eventify Team" <${process.env.EMAIL_USER}>`,
       to: userEmail,
@@ -103,6 +106,9 @@ const sendOTPEmail = async (userEmail, otp, type) => {
       : "Please use the following OTP to verify and confirm your event booking.";
 
   try {
+    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+      throw new Error("SMTP credentials missing in environment variables");
+    }
     await transporter.sendMail({
       from: `"Eventify Team" <${process.env.EMAIL_USER}>`,
       to: userEmail,
