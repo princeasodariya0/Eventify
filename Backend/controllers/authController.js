@@ -49,16 +49,21 @@ export const register = async (req, res) => {
     action: "account_verification",
   });
 
-  // Fire and forget email sending to make the process faster
-  sendOTPEmail(email, otp, "account_verification").catch((emailError) => {
-    console.error("❌ DEBUG: Background Auth Register Mail Error:", emailError);
-  });
+  // Wait for email to send to catch errors during testing
+  try {
+    await sendOTPEmail(email, otp, "account_verification");
+    console.log("✅ OTP Email sent successfully to:", email);
+  } catch (emailError) {
+    console.error("❌ Failed to send OTP email:", emailError.message);
+    // You can choose to throw error or proceed. For now, let's throw to be sure.
+    throw new ExpressError(500, `Email delivery failed: ${emailError.message}`);
+  }
 
   res.status(201).json({
     success: true,
     message: "Account created. An OTP has been sent to your email.",
     email: user.email,
-    emailSent: true, // We assume success for the UI to proceed
+    emailSent: true,
   });
 };
 
