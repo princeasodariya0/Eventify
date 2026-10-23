@@ -1,59 +1,41 @@
-import { google } from "googleapis";
 import ExpressError from "../utils/ExpressError.js";
 
-// Gmail REST API (HTTPS/443) is used instead of SMTP because cloud hosts like
+// Brevo HTTP API (HTTPS/443) is used instead of SMTP because cloud hosts like
 // Render block outbound SMTP ports (25, 465, 587), which caused ETIMEDOUT.
 
-let gmailClient = null;
-
-const getGmailClient = () => {
-  if (gmailClient) return gmailClient;
-
-  const clientId = process.env.GMAIL_CLIENT_ID;
-  const clientSecret = process.env.GMAIL_CLIENT_SECRET;
-  const refreshToken = process.env.GMAIL_REFRESH_TOKEN;
-  const user = process.env.EMAIL_USER;
-
-  if (!clientId || !clientSecret || !refreshToken || !user) {
-    console.error(
-      "❌ Missing Gmail API env vars (GMAIL_CLIENT_ID, GMAIL_CLIENT_SECRET, GMAIL_REFRESH_TOKEN, EMAIL_USER)"
-    );
-    return null;
-  }
-
-  const oauth2Client = new google.auth.OAuth2(clientId, clientSecret);
-  oauth2Client.setCredentials({ refresh_token: refreshToken });
-
-  gmailClient = google.gmail({ version: "v1", auth: oauth2Client });
-  return gmailClient;
-};
-
-const buildRawMessage = (from, to, subject, html) => {
-  const mime = [
-    `From: ${from}`,
-    `To: ${to}`,
-    `Subject: ${subject}`,
-    "MIME-Version: 1.0",
-    'Content-Type: text/html; charset="UTF-8"',
-    "",
-    html,
-  ].join("\r\n");
-
-  return Buffer.from(mime).toString("base64url");
-};
+const BREVO_ENDPOINT = "https://api.brevo.com/v3/smtp/email";
 
 const sendEmail = async (to, subject, html) => {
+  const apiKey = process.env.BREVO_API_KEY;
   const sender = process.env.EMAIL_USER;
-  const gmail = getGmailClient();
 
-  if (!gmail) throw new ExpressError(500, "Mail service unavailable");
+  if (!apiKey || !sender) {
+    console.error(
+      "❌ Missing email env vars (BREVO_API_KEY, EMAIL_USER)"
+    );
+    throw new ExpressError(500, "Mail service unavailable");
+  }
 
-  await gmail.users.messages.send({
-    userId: "me",
-    requestBody: {
-      raw: buildRawMessage(`"Eventify Team" <${sender}>`, to, subject, html),
+  const response = await fetch(BREVO_ENDPOINT, {
+    method: "POST",
+    headers: {
+      "api-key": apiKey,
+      "Content-Type": "application/json",
+      accept: "application/json",
     },
+    body: JSON.stringify({
+      sender: { name: "Eventify Team", email: sender },
+      to: [{ email: to }],
+      subject,
+      htmlContent: html,
+    }),
+    signal: AbortSignal.timeout(15000),
   });
+
+  if (!response.ok) {
+    const detail = await response.text();
+    throw new Error(`Brevo API ${response.status}: ${detail}`);
+  }
 };
 
 const sendBookingEmail = async (userEmail, userName, eventTitle) => {
